@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Akira AI Website
 
-## Getting Started
+株式会社エイト AI事業部の公式Webサイト。Next.js + Tailwind CSS + Stripe統合。
 
-First, run the development server:
+## セットアップ
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ローカルでの開発: http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Vercelへのデプロイ
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 方法1: Vercel CLIを使用
 
-## Learn More
+```bash
+npm install -g vercel
+vercel
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 方法2: GitHub連携（推奨）
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. GitHubにリポジトリをPush
+2. https://vercel.com から新規プロジェクトを作成
+3. GitHubリポジトリを選択してデプロイ
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 環境変数
 
-## Deploy on Vercel
+デプロイ時に以下を設定してください：
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`: Stripe公開キー
+- `STRIPE_SECRET_KEY`: Stripe秘密キー
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ページ構成
+
+- `/`: ランディングページ
+- `/products`: 商品一覧・販売ページ
+- `/legal/tokushoho`: 特定商取引法に基づく表記
+
+## 次のステップ
+
+1. [ ] Stripe テストキーを取得
+2. [ ] `.env.local`を作成してキーを設定
+3. [ ] Stripeチェックアウト機能を実装
+4. [ ] Vercelへデプロイ
+5. [ ] 独自ドメインを接続

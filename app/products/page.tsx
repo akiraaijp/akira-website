@@ -3,201 +3,141 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  features: string[];
-  stripeUrl?: string;
-}
-
-const products: Product[] = [
+const products = [
   {
-    id: 'free-guide',
-    name: '無料：AIエージェント入門ガイド',
-    price: 0,
-    description: 'AIエージェント活用の基本をPDF形式で解説。実際の事例付き。',
+    id: 'starter',
+    name: 'AIエージェント入門ガイド',
+    price: 980,
+    badge: '入門',
+    badgeColor: 'bg-blue-600',
+    description: '12体運用の経営者が教える、失敗しないAIエージェント設計の基本。SOUL.mdテンプレート付き。',
     features: [
-      'AIエージェントの基本概念',
-      'OpenClawの使い方',
-      'はじめての自動化ワークフロー',
-      'よくある質問への回答'
+      '失敗パターン3つと解決策',
+      'すぐ使えるSOUL.mdテンプレート',
+      '最初の1週間のロードマップ',
+      '改善サイクルの作り方',
     ],
-    stripeUrl: '#' // 無料なので不要
   },
   {
-    id: 'starter-pack',
-    name: 'スターターパック',
+    id: 'complete',
+    name: 'AIエージェント完全設計マニュアル',
     price: 4980,
-    description: '12体のAIエージェントを実運用する経営者が、実装から運用までを解説。',
+    badge: '完全版',
+    badgeColor: 'bg-indigo-600',
+    description: '12体運用で学んだ人格設計×自動化の全技術。コピペで使えるSOUL.mdテンプレート10種類付き。',
     features: [
-      'エージェント設計の基本パターン',
-      '実装テンプレート（Slack連携、Gmail自動化など）',
-      'SOUL.md: 人格・価値観の定義方法',
-      'トラブルシューティングガイド',
-      '月1回のアップデート'
+      '人格設計の完全フレームワーク',
+      'SOUL.mdテンプレート10種類（業種別）',
+      '12体運用で見えた落とし穴ベスト5',
+      '月商1000万のファネル設計',
+      'エージェント間連携の設計方法',
     ],
-    stripeUrl: 'https://buy.stripe.com/example-starter' // 実際のStripe URLに置き換え
+    popular: true,
   },
-  {
-    id: 'pro-bundle',
-    name: 'プロバンドル',
-    price: 29800,
-    description: 'スターターパック + 詳細な実装ガイド + 1か月のメールサポート付き。',
-    features: [
-      'スターターパックの全内容',
-      'エージェント間の連携設計',
-      'Stripe・Telegram・その他ツール統合ガイド',
-      'セキュリティ・メモリ管理のベストプラクティス',
-      'ビジネス活用の実装パターン',
-      '1ヶ月のメールサポート',
-      '優先アップデート配信'
-    ],
-    stripeUrl: 'https://buy.stripe.com/example-pro' // 実際のStripe URLに置き換え
-  }
 ];
 
 export default function ProductsPage() {
-  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [loading, setLoading] = useState<string | null>(null);
+
+  const handleBuy = async (productId: string) => {
+    setLoading(productId);
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('エラーが発生しました。もう一度お試しください。');
+      }
+    } catch {
+      alert('エラーが発生しました。もう一度お試しください。');
+    } finally {
+      setLoading(null);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-white">
-      {/* Header */}
-      <header className="border-b border-slate-700 sticky top-0 z-50 bg-slate-900/95 backdrop-blur">
-        <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold hover:text-blue-400 transition">
-            🤖 Akira AI
-          </Link>
-          <span className="text-slate-400">商品一覧</span>
+    <div className="min-h-screen bg-gray-950 text-white">
+      <header className="border-b border-gray-800 sticky top-0 z-50 bg-gray-950/95 backdrop-blur">
+        <nav className="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
+          <Link href="/" className="text-xl font-bold hover:text-indigo-400 transition">🤖 アキラ AI</Link>
+          <span className="text-gray-400 text-sm">コンテンツ一覧</span>
         </nav>
       </header>
 
-      {/* Hero */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-4xl font-bold text-center mb-4">デジタル商品ラインアップ</h2>
-        <p className="text-center text-slate-300 max-w-2xl mx-auto">
-          無料から有料まで。あなたのレベルに合わせて選べます。
+      <section className="max-w-5xl mx-auto px-6 py-16 text-center">
+        <p className="text-indigo-400 text-sm font-semibold tracking-widest uppercase mb-3">AI BUSINESS CONTENTS</p>
+        <h1 className="text-4xl font-black mb-4">AIビジネス自動化コンテンツ</h1>
+        <p className="text-gray-400 max-w-xl mx-auto">
+          12体のAIエージェントを実際に運用する経営者が、<br />失敗と成功から学んだ知識を全公開します。
         </p>
       </section>
 
-      {/* Products Grid */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid md:grid-cols-3 gap-8">
+      <section className="max-w-5xl mx-auto px-6 pb-20">
+        <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {products.map((product) => (
             <div
               key={product.id}
-              className={`rounded-lg border transition ${
-                selectedProduct === product.id
-                  ? 'border-blue-500 bg-slate-700/50'
-                  : 'border-slate-600 bg-slate-700/30 hover:border-slate-500'
+              className={`relative rounded-2xl border p-8 flex flex-col ${
+                product.popular
+                  ? 'border-indigo-500 bg-indigo-950/30'
+                  : 'border-gray-800 bg-gray-900/50'
               }`}
             >
-              <div className="p-8">
-                {/* Price */}
-                <h3 className="text-2xl font-bold mb-2">{product.name}</h3>
-                <div className="mb-4">
-                  {product.price === 0 ? (
-                    <p className="text-3xl font-bold text-green-400">無料</p>
-                  ) : (
-                    <div>
-                      <p className="text-sm text-slate-400 mb-1">金額</p>
-                      <p className="text-3xl font-bold">¥{product.price.toLocaleString('ja-JP')}</p>
-                    </div>
-                  )}
+              {product.popular && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <span className="bg-indigo-600 text-white text-xs font-bold px-4 py-1 rounded-full">人気No.1</span>
                 </div>
+              )}
 
-                {/* Description */}
-                <p className="text-slate-300 mb-6">{product.description}</p>
+              <div className="mb-6">
+                <span className={`${product.badgeColor} text-white text-xs font-bold px-3 py-1 rounded-full`}>
+                  {product.badge}
+                </span>
+              </div>
 
-                {/* Features */}
-                <div className="mb-8">
-                  <p className="text-sm font-semibold text-slate-400 mb-3">含まれるもの</p>
-                  <ul className="space-y-2">
-                    {product.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start text-slate-300 text-sm">
-                        <span className="text-blue-400 mr-3">✓</span>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+              <h2 className="text-xl font-bold mb-3">{product.name}</h2>
+              <p className="text-gray-400 text-sm mb-6 leading-relaxed">{product.description}</p>
+
+              <ul className="space-y-2 mb-8 flex-1">
+                {product.features.map((f, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                    <span className="text-indigo-400 mt-0.5 flex-shrink-0">✓</span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-auto">
+                <div className="flex items-baseline gap-2 mb-4">
+                  <span className="text-3xl font-black">¥{product.price.toLocaleString()}</span>
+                  <span className="text-gray-500 text-sm">（税込・買い切り）</span>
                 </div>
-
-                {/* CTA */}
-                {product.price === 0 ? (
-                  <button
-                    onClick={() => alert('ダウンロードリンクはメール送信されます')}
-                    className="w-full bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-semibold transition"
-                  >
-                    ダウンロード
-                  </button>
-                ) : (
-                  <a
-                    href={product.stripeUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition text-center"
-                  >
-                    購入する
-                  </a>
-                )}
+                <button
+                  onClick={() => handleBuy(product.id)}
+                  disabled={loading === product.id}
+                  className={`w-full py-3 rounded-xl font-bold transition text-sm ${
+                    product.popular
+                      ? 'bg-indigo-600 hover:bg-indigo-500 text-white'
+                      : 'bg-white hover:bg-gray-100 text-gray-900'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  {loading === product.id ? '処理中...' : '今すぐ購入する →'}
+                </button>
               </div>
             </div>
           ))}
         </div>
-      </section>
 
-      {/* FAQ */}
-      <section className="bg-slate-800/50 py-16 mt-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 className="text-3xl font-bold text-center mb-12">よくある質問</h3>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h4 className="text-lg font-semibold mb-3">返金は受け付けていますか？</h4>
-              <p className="text-slate-400">
-                デジタル商品のため、原則として購入後の返金・キャンセルは受け付けておりません。
-                ご不明な点がある場合は、購入前にお問い合わせください。
-              </p>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-3">支払い方法は？</h4>
-              <p className="text-slate-400">
-                クレジットカード（Visa、Mastercard、American Express）での決済に対応しています。
-                Stripe経由で安全に処理されます。
-              </p>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-3">購入後、いつ受け取れますか？</h4>
-              <p className="text-slate-400">
-                購入完了後、即座にダウンロードリンクがメールで送信されます。
-                サポート付きプランはメールサポートの詳細を同時にお送りします。
-              </p>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-3">プランのアップグレードは？</h4>
-              <p className="text-slate-400">
-                お問い合わせください。段階的な購入に対応します。
-                支払った金額は差分決済にあてることが可能です。
-              </p>
-            </div>
-          </div>
-        </div>
+        <p className="text-center text-gray-600 text-xs mt-8">
+          Stripe決済（カード対応）｜購入後即ダウンロード｜
+          <Link href="/legal/tokushoho" className="underline hover:text-gray-400">特定商取引法表記</Link>
+        </p>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-700 bg-slate-900/50 py-8 mt-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-sm text-slate-400">
-          <p>&copy; 2026 Akira AI / 株式会社エイト AI事業部</p>
-          <div className="flex gap-6 mt-4 sm:mt-0">
-            <Link href="/legal/tokushoho" className="hover:text-slate-200 transition">
-              特定商取引法に基づく表記
-            </Link>
-            <a href="mailto:akira.ai.eight@gmail.com" className="hover:text-slate-200 transition">
-              お問い合わせ
-            </a>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
