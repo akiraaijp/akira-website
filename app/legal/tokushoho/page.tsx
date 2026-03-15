@@ -24,12 +24,6 @@ export default function TokushohePage() {
             <p>株式会社エイト</p>
           </div>
 
-          {/* 代表者 */}
-          <div className="bg-slate-700/30 border border-slate-600 p-6 rounded-lg">
-            <h3 className="text-xl font-semibold text-white mb-3">代表者</h3>
-            <p>大野隼人</p>
-          </div>
-
           {/* 所在地 */}
           <div className="bg-slate-700/30 border border-slate-600 p-6 rounded-lg">
             <h3 className="text-xl font-semibold text-white mb-3">所在地</h3>
